@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <title>Orion Calculator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <style>
+    * { user-select: none; }
+  </style>
+  <script>
+    window.onload = function() {
+      let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+      })
+
+      const inputs = document.getElementsByTagName("input");
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener("keypress", function (evt) {
+          if (evt.which < 48 || evt.which > 57) {
+            evt.preventDefault();
+          }
+        });
+        inputs[i].addEventListener("focus", function () {
+          this.select();
+        });
+        inputs[i].addEventListener("input", function () {
+          calc_feathers();
+        });
+      }
+      const plus = document.getElementsByName("plus");
+      for (let i = 0; i < plus.length; i++) {
+        plus[i].addEventListener("click", function (evt) {
+          let num = parseInt(this.parentNode.children[1].value);
+          this.parentNode.children[1].value = num + 1;
+          calc_feathers();
+        });
+      }
+      const zero = document.getElementsByName("zero");
+      for (let i = 0; i < zero.length; i++) {
+        zero[i].addEventListener("click", function (evt) {
+          this.parentNode.children[1].value = "0";
+          calc_feathers();
+        });
+      }
+    }
+
+    function calc_feathers() {
+      const f_gen = parseInt(document.getElementById('feather_generation').value);
+      const f_mul = 1 + ((parseInt(document.getElementById('feather_multiplier').value) * 5) / 100);
+      const sfp = parseInt(document.getElementById('super_feather_production').value) * 5;
+      const shiny_lv = parseInt(document.getElementById('shiny_feathers').value);
+      const shinies = parseInt(document.getElementById('shinies').value);
+      const restart = parseInt(document.getElementById('feather_restart').value);
+      const feather_gen = f_gen * f_mul;
+      const super_feather_gen = sfp * f_mul;
+      const shiny_formula = (1 + ((shiny_lv * shinies) / 100));
+      const restart_exponent = 3 ** restart;
+      const has_maple = document.getElementById('maple_megafeather').checked;
+      let result = (((feather_gen + super_feather_gen) * shiny_formula) * restart_exponent);
+      if (has_maple) result *= 10;
+      document.getElementById('feathers').value = result;
+    }
+  </script>
+</head>
+
+<body>
+
+  <div class="container p-5 my-5">
+    <div class="container">
+      <h4>Feather Generation</h4>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Lv</span>
+        <input id="feather_generation" type="text" class="form-control" placeholder="0">
+        <button type="button" class="btn btn-primary" name="plus">+</button>
+        <button type="button" class="btn btn-secondary" name="zero">Zero</button>
+      </div>
+    </div>
+
+
+    <div class="container mt-5">
+      <h4>Feather Multiplier</h4>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Lv</span>
+        <input id="feather_multiplier" type="text" class="form-control" placeholder="0">
+        <button type="button" class="btn btn-primary" name="plus">+</button>
+        <button class="btn btn-secondary" type="button" name="zero">Zero</button>
+      </div>
+    </div>
+
+
+    <div class="container mt-5">
+      <h4>Super Feather Production</h4>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Lv</span>
+        <input id="super_feather_production" type="text" class="form-control" placeholder="0">
+        <button type="button" class="btn btn-primary" name="plus">+</button>
+        <button class="btn btn-secondary" type="button" name="zero">Zero</button>
+      </div>
+    </div>
+
+
+    <div class="container mt-5">
+      <h4>Shiny Feathers</h4>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Lv</span>
+        <input id="shiny_feathers" type="text" class="form-control" placeholder="0">
+        <button type="button" class="btn btn-primary" name="plus">+</button>
+        <button class="btn btn-secondary" type="button" name="zero">Zero</button>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Shinies</span>
+        <input id="shinies" type="text" class="form-control" placeholder="0">
+        <button type="button" class="btn btn-primary" name="plus">+</button>
+        <button class="btn btn-secondary" type="button" name="zero">Zero</button>
+      </div>
+    </div>
+
+
+    <div class="container mt-5">
+      <h4>Feather Restart</h4>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Lv</span>
+        <input id="feather_restart" type="text" class="form-control" placeholder="0">
+        <button type="button" class="btn btn-primary" name="plus">+</button>
+        <button class="btn btn-secondary" type="button" name="zero">Zero</button>
+      </div>
+    </div>
+
+    
+    <div class="container mt-5">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="maple_megafeather" name="maple_megafeather" value="maple">
+        <label class="form-check-label" for="check1">Maple Megafeather</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="input-group">
+      <span class="input-group-text text-bg-success">Feathers Per Second</span>
+      <input id="feathers" type="text" class="form-control" placeholder="0" disabled>
+    </div>
+  </div>
+</body>
+
+</html>
